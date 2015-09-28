@@ -1,0 +1,91 @@
+<html>
+<head>
+<title> Object properties example - Dr. Smith</title>
+<script type="text/javascript">
+
+/* globals - two animals */
+
+var animal1 = {name:"dog", locomotion:"running", food:"meat", range:"land world-wide", noise: "bark", color: "brown, black, or white or grey", genus:"Canis" };
+
+var animal2 = {name:"dolphin", locomotion:"swimming", food:"fish", range:"deep sea, and some coastal areas", noise: "squeaking and clicking noises", color: "grey", genus: "Tursiops" };
+
+var animal3 = {name:"", locomotion:"", food:"", range:"", noise: "", color: "", genus: "" };
+
+
+function guessAnimal(animal)
+{
+var guess, animal_properties_message, alert_message;
+// keywords: var, if, function, else...
+animal_properties_message = "I move by " + animal.locomotion + ", eat " + animal.food + ", live in or on " + animal.range + ", belong to the genus " + animal.genus + ", am colored " + animal.color + ", and the noise I make is " + animal.noise + ". What am I?";
+
+guess = prompt(animal_properties_message);
+
+alert_message = "You guessed " + guess + ". I am a " + animal.name + ".";
+
+alert(alert_message);
+
+document.getElementById("demo").innerHTML = alert_message;
+
+/* document.getElementById("demo").innerHTML = car.type; */
+}
+
+function makeAnimal(animal, name, locomotion, food, range, noise, color, genus)
+{
+animal.name = name;
+animal.locomotion = locomotion;
+animal.noise = noise;
+animal.food = food;
+animal.color = color;
+animal.range = range;
+animal.genus = genus;
+}
+
+</script>
+
+<style>
+body {background-color:lightgray}
+h1 {color:darkred}
+p {color:darkred}
+</style>
+
+</head>
+<body>
+<h1>Simple animal guessing game!</h1>
+<img src="0805-california-mystery-animal.jpg" alt="mystery animal" height="240" width="360">
+<br>
+<br>
+<input type="button" onclick="guessAnimal(animal2)" value="1) Guess what animal I am" />
+<br>
+<form name = "animalParts">
+
+Name:<br>
+<input type="text" name="name">
+<br>
+Locomotion:<br>
+<input type="text" name="locomotion">
+<br>
+Noise:<br>
+<input type="text" name="noise">
+<br>
+Food:<br>
+<input type="text" name="food">
+<br>
+Color:<br>
+<input type="text" name="color">
+<br>
+Range:<br>
+<input type=" text" name="range">
+<br>
+Genus:<br>
+<input type="text" name="genus">
+<br >
+</form>
+
+<input type="button" onclick="makeAnimal(animal3, document.animalParts.name.value, document.animalParts.locomotion.value, document.animalParts.food.value, document.animalParts.range.value, document.animalParts.noise.value, document.animalParts.color.value, document.animalParts.genus.value)" value="2a) Make an animal" />
+<br>
+<input type="button" onclick="guessAnimal(animal3)" value= "2b) Test your animal" />
+<br>
+<input type="button" onclick="guessAnimal(animal1)" value="3) Guess what animal I am" />
+<p id="demo"> Your guess and the answer will appear here.</p>
+</body>
+</html>
