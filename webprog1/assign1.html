@@ -1,0 +1,142 @@
+<html>
+<head>
+<title> Assignment 1: JavaScript objects, methods, and decisions</title>
+<link href="../assets/css/site.css" rel="stylesheet">
+<script type="text/javascript">
+
+// Make user guess that part of the brain when they click!
+// Create global variables that determine properties of brain areas clicked //
+var pons = {name: "pons", primaryVesicle: "hindbrain", secondaryVesicle: "metencephalon", phylo: "oldest", fxn: "sleep and arousal"};
+var thalamus = {name: "thalamus", primaryVesicle: "forebrain", secondaryVesicle: "diencephalon", phylo: "newest", fxn: "sensory relay to cortex"};
+var tectum = {name: "tectum", primaryVesicle: "midbrain", secondaryVesicle: "metencephalon", phylo: "old", fxn: "visual and auditory orienting"};
+var cerebellum = {name: "cerebellum", primaryVesicle: "hindbrain", secondaryVesicle: "metencephalon", phylo: "oldest", fxn: "smooth motor action, coordinated movement, and conditioned learning"};
+var medulla = {name: "medulla", primaryVesicle: "hindbrain", secondaryVesicle: "myelencephalon", phylo: "oldest", fxn: "respiration and muscle tonus"};
+var tegmentum = {name: "tegmentum", primaryVesicle: "midbrain", secondaryVesicle: "mesencephalon", phylo: "old", fxn: "arousal, motor coordination, fighting, mating, and pain regulation"};
+var hypothalamus = {name: "hypothalamus", primaryVesicle: "forebrain", secondaryVesicle: "diencephalon", phylo: "newest", fxn: "homeostasis and hormonal regulation"};
+var mammillaryBody = {name: "mammillary body", primaryVesicle: "forebrain", secondaryVesicle: "telencephalon", phylo: "newest", fxn: "memory, along with the hippocampus"};
+var amygdala = {name: "amygdala", primaryVesicle: "forebain", secondaryVesicle: "telencephalon", phylo: "newest", fxn: "emotion, especially anxiety and fear"};
+var parietalLobe = {name: "parietal lobe", primaryVesicle: "forebrain", secondaryVesicle: "telencephalon", phylo: "newest", fxn: "somatosensory and visuospatial processing, and is one of the four major lobes"};
+var frontalLobe = {name: "frontal lobe", primaryVesicle: "forebrain", secondaryVesicle: "telencephalon", phylo: "newest", fxn: "planning, executive functioning, and impulse control, and is one of the four major lobes"};
+var temporalLobe = {name: "temporal lobe", primaryVesicle: "forebrain", secondaryVesicle: "telencephalon", phylo: "newest", fxn: "hearing, speech, working memory, visually processing faces and scenes, and is one of the four major lobes"};
+var occipitalLobe = {name: "occipital lobe", primaryVesicle: "forebrain", secondaryVesicle: "telencephalon", phylo: "newest", fxn: "vision, and is one of the four major lobes"};
+
+// Create an empty area variable with blank values waiting for user input
+var area1 = {name: "", primaryVesicle: "", secondaryVesicle: "", phylo: "", fxn: ""};
+
+// Stuff in brackets [ ] are not yet mapped because they're too specific. Plus, I've only got a sagittal view.
+// Here I've only mapped 13 regions. That means user can guess 10 more based on where they click:
+// cerebral cortex (frontal, parietal, temporal, occipital lobes),
+// [basal ganglia [caudate, putamen, globus pallidus]],
+// limbic system ([hippocampus], mammillary bodies, amygdala), } forebrain >> telencephalon
+// thalamus, hypothalamus, } forebrain >> diencephalon
+// tectum [superior colliculus, inferior colliculus],
+// tegmentum [PAG, red nucleus, substantia nigra, VTA], } midbrain >> mesencephalon
+// cerebellum, pons, } hindbrain >> metencephalon
+// medulla } hindbrain >> myelencephalon //
+
+//The function guessAreaNameOnly prompts the user for the name of the brain area described and compares it to the parameter name.
+function guessAreaNameOnly(area)
+{
+    var userGuess, areaPropertiesMessage, correctMessage;
+
+    areaPropertiesMessage = "This structure is located in the " + area.secondaryVesicle + ". It is among the phylogenetically " + area.phylo + " structures in the brain, as it is part of the " + area.primaryVesicle + ". " + "It is mainly involved in " + area.fxn + ". What structure of the brain is this?"
+    userGuess = prompt(areaPropertiesMessage); //Gathers user input.
+    if (userGuess.toLowerCase() == area.name) //*.toLowerCase() converts user's input to lowercase to easily compare with my givens
+        {
+        correctMessage = "You are correct! It is the " + area.name + ".";
+        // bodyMessage = "Good job! Click on another area.";
+        }
+    else if (userGuess == "") //Displays when user doesn't input anything
+        {
+        correctMessage = "You did not enter anything. The answer is " + area.name + ".";
+        // bodyMessage = "Try clicking another area."
+        }
+    else //Displays when user's answer is wrong
+        {
+        correctMessage = "You are incorrect. It is the " + area.name + ".";
+        // bodyMessage = "Try clicking another area."
+        }
+    alert(correctMessage); //Writes the alert to the webpage.
+    document.getElementById("demo").innerHTML = correctMessage;
+}
+
+function makeArea(area, name, primaryVesicle, secondaryVesicle, phylo, fxn)
+{
+  area.name = name;
+  area.primaryVesicle = primaryVesicle;
+  area.secondaryVesicle = secondaryVesicle;
+  // if (area.primaryVesicle == "hindbrain")
+  // {area.phylo = "oldest"}
+  // else if (area.primaryVesicle == "midbrain")
+  // {area.phylo = "old"}
+  // else (area.primaryVesicle == "forebrain")
+  // {area.phylo = "newest"}
+  area.phylo = phylo;
+  area.fxn = fxn;
+}
+</script>
+</head>
+
+<body>
+<h1>Assignment 1</h1>
+<main>
+<h2>Guess that part of the brain</h2>
+<p>Begin by clicking on any part of the brain below. <br> (Note: Not every brain area is clickable...yet)</p>
+<!-- <p> Click these buttons to get you started. </p>
+<input type="button" onclick="guessAreaNameOnly(pons)" value="1) Guess this part of the brain" />
+<br><br>
+<input type="button" onclick="guessAreaNameOnly(thalamus)" value="2) Guess this part of the brain" />
+<br><br>
+<input type="button" onclick="guessAreaNameOnly(tectum)" value="3) Guess this part of the brain" />
+<br><br> -->
+<img src="../assets/img/gehirnatlas.jpg" alt="saggital map" usemap="#brain"> <!--Image from http://www.brain-maps.com/, specifically from http://www.brain-maps.com/gehirn/gehirnatlas.jpg I did not copy their coordinates.-->
+<map name="brain"> <!-- DEAR GOD, SO MANY COORDINATES. Thank you, http://imagemap-generator.dariodomi.de/-->
+    <area alt="pons" title="pons" onclick="guessAreaNameOnly(pons)" shape="polygon" coords="323,329,303,334,291,350,287,376,294,405,304,425,320,436,334,440,348,439,361,430,368,414,373,388,373,369,362,349,348,334">
+    <area alt="cerebellum" title="cerebellum" onclick="guessAreaNameOnly(cerebellum)" shape="poly" coords="500,317,494,318,494,309,488,298,483,290,473,280,468,278,461,271,440,266,433,263,428,263,413,265,405,268,397,274,393,282,390,286,390,290,396,295,394,303,391,311,389,320,389,330,390,337,393,348,397,354,411,366,416,371,426,375,438,375,439,378,436,380,426,381,415,386,405,390,404,401,404,411,405,427,407,434,411,440,414,447,416,459,415,468,418,480,424,491,430,503,434,506,443,506,452,507,463,500,469,496,481,488,500,483,508,478,523,472,523,462,535,461,545,456,554,443,564,435,568,428,573,413,579,402,579,387,573,377,573,368,541,350,532,336,522,326,515,320">
+    <area alt="medulla" title="medulla" onclick="guessAreaNameOnly(medulla)" shape="poly" coords="349,445,346,456,350,470,353,480,359,488,367,493,373,499,378,510,383,518,390,529,395,536,401,547,402,554,405,564,409,571,419,574,430,576,437,576,439,562,440,548,437,531,434,517,425,493,414,479,395,464,391,452,387,440,384,426,383,420">
+    <area alt="tectum" title="tectum" onclick="guessAreaNameOnly(tectum)" shape="poly" coords="356,275,361,280,365,284,369,290,374,299,375,306,380,315,381,322,386,322,388,316,391,307,388,298,384,293,380,288,376,283,375,278,371,275,367,273,361,272">
+    <area alt="tegmentum" title="" onclick="guessAreaNameOnly(tegmentum)" shape="poly" coords="348,284,342,283,334,286,326,288,322,293,315,296,314,300,322,303,324,308,328,315,331,322,331,324,340,328,350,332,358,337,363,343,367,352,373,364,375,373,376,383,380,388,380,380,380,366,378,352,377,339,372,323,367,310,363,300,358,293">
+    <area alt="thalamus" title="thalamus" onclick="guessAreaNameOnly(thalamus)" shape="poly" coords="272,200,254,210,243,226,244,237,251,250,260,259,273,260,295,263,315,263,329,263,342,264,353,254,357,237,353,220,344,209,327,200,307,196">
+    <area alt="hypothalamus" title="hypothalamus" onclick="guessAreaNameOnly(hypothalamus)" shape="poly" coords="262,276,274,282,285,289,286,297,284,312,276,315,271,317,263,319,254,322,254,310,250,308,237,308,247,300,255,287">
+    <area alt="mammillary body" title="mammillary body" onclick="guessAreaNameOnly(mammillaryBody)" shape="poly" coords="304,296,296,295,291,297,290,309,293,313,300,316,307,315,311,312,312,307,312,300">
+    <area alt="amygdala" title="amygdala" onclick="guessAreaNameOnly(amygdala)" shape="poly" coords="287,354,277,352,269,349,258,347,251,348,247,355,248,359,256,363,272,363,279,364,285,365">
+    <area alt="parietal lobe" title="parietal lobe" onclick="guessAreaNameOnly(parietalLobe)" shape="poly" coords="587,117,567,84,552,71,538,62,528,51,517,36,504,34,491,28,474,23,460,23,453,26,434,17,424,16,409,21,393,25,374,27,362,28,351,32,335,41,327,49,318,56,313,68,310,82,311,95,316,110,350,109,404,131,430,143,466,197,463,245">
+    <area alt="frontal lobe" title="frontal lobe" onclick="guessAreaNameOnly(frontalLobe)" shape="poly" coords="413,14,395,20,369,22,354,26,339,33,327,42,316,54,309,66,302,81,284,85,273,84,263,91,243,100,232,99,219,105,210,112,185,113,172,109,166,117,160,123,143,137,131,153,114,167,104,174,91,181,85,194,79,202,79,217,80,231,80,245,80,255,88,261,100,269,117,276,137,277,159,284,185,294,197,297,214,304,205,316,192,323,170,327,148,330,125,332,102,328,76,321,54,307,43,290,29,278,22,263,20,239,17,226,13,199,14,183,26,159,39,123,56,111,69,93,86,77,117,58,138,44,171,29,210,18,235,8,316,6,360,5">
+    <area alt="temporal lobe" title="temporal lobe" onclick="guessAreaNameOnly(temporalLobe)" shape="poly" coords="198,324,190,327,181,330,171,331,163,340,163,345,165,356,169,364,180,372,187,376,196,379,206,388,214,393,221,397,237,401,251,402,257,399,261,404,272,405,281,405,287,400,289,396,287,386,284,378,283,371,278,366,261,366,257,368,249,368,244,371,234,368,227,362,225,357,228,348,232,342,239,338,243,335,246,330,247,324,245,321,240,321,232,324,226,328,215,332,210,333,203,333">
+    <area alt="occipital lobe" title="occipital lobe" onclick="guessAreaNameOnly(occipitalLobe)" shape="poly" coords="548,168,574,131,587,124,607,145,627,207,633,252,626,302,611,349,580,365,551,348,525,320,505,302,493,284,475,264,463,253">
+</map>
+<p id="demo"> Your guess and the answer will appear here.</p>
+
+Try making a quiz item on a brain area yourself! Fill in the following then click the two buttons below the form.<br><br>
+<form name = "brainArea1">
+Name:<br>
+<input type="text" name="name">
+<br><br>
+Primary Vesicle (hindbrain, midbrain, or forebrain?):<br>
+<input type="text" name="primaryVesicle">
+<br><br>
+Secondary Vesicle (metencephalon, mesencephalon, myelencephalon, diencephalon, or telencephalon?):<br>
+<input type="text" name="secondaryVesicle">
+<br><br>
+Relative phylogenetic age (oldest if hindbrain, old if midbrain, newest if forebrain):<br>
+<input type="text" name="phylo">
+<br><br>
+Function (what is this area involved in?):<br>
+<input type="text" name="fxn">
+<br>
+</form>
+
+<input type="button" onclick="makeArea(area1, document.brainArea1.name.value, document.brainArea1.primaryVesicle.value,
+document.brainArea1.secondaryVesicle.value, document.brainArea1.phylo.value, document.brainArea1.fxn.value)" value="1) Make a quiz item on this brain area" />
+<br>
+<input type="button" onclick="guessAreaNameOnly(area1)" value= "2) Test your quiz item" />
+</main>
+</body>
+
+<div id="foot">
+<p>Image credit: <a href=http://www.brain-maps.com/>Brain Maps</a></p>
+<p><a href="webproghome.html">Go back to Web Prog I (EME 6930) Fall 2015 home</a><p>
+<p><a href="../index.html"> Play Heap Home</a></p>
+<p>Thanks for hosting my site, <a href = https://github.com/> github</a>! </p>
+</div>
+</html>
