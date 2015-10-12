@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+
+<head></head>
+
+<script type="text/javascript">
+
+/*
+ * write test to the desc area THIS IS NOT DEBUGGED..DO BIG LOOKOVER!!!
+ */
+function writeText(txt)
+{
+document.getElementById("desc").innerHTML=txt;
+}
+
+function album(title, artist, year, genre, ratingAllMusic, ratingUsers, numberRaters, review) {
+    this.title = title;
+    this.artist = artist;
+    this.year = year;
+    this.genre = genre;
+    this.ratingAllMusic = ratingAllMusic; //rating of experts so far
+    this.ratingUsers = ratingUsers; // current user's rating
+    this.numberRaters = numberRaters; // number of raters
+    this.review = review;
+
+
+    /* need a way to add songs, probably with array & loop */
+
+    /* method to add another user rating . Would add it to the weighted average. */
+    this.addRatingUsers = function (rating) {
+        alert("Before: N = " + this.numberRaters + ". Previous average rating = " + this.ratingUsers);
+        this.previousSum = this.ratingUsers * this.numberRaters; // Figure out the sum on the previous run by multiplying the known average by the previous number of raters
+        alert("Previous average rating x Previous N = " + this.ratingUsers * this.numberRaters + ". Product = " + this.previousSum);
+        this.numberRaters = this.numberRaters + 1; // Same as ++this.numberRaters;
+        alert("Updated N = " + this.numberRaters);
+        this.previousSum = Number(this.previousSum); // Tanya: Debugged! Turn the previous sum into a number
+        rating = Number(rating);  // Tanya: Debugged! Turn the current user's rating into a number
+        this.updatedSum = (this.previousSum + rating);
+        alert("Updated sum = " + this.updatedSum);
+        this.updatedSum = Number(this.updatedSum); // Turn everything into a number
+        this.ratingUsers = this.updatedSum / this.numberRaters;
+        this.ratingUsers = Number(this.ratingUsers); // Turn this into a number for the next n
+        alert("Updated Average = " + this.ratingUsers);
+
+    }
+
+
+    /* write the album info to the web page */
+
+this.writeAlbum = function () {
+    var s = this.title + " " +
+    this.artist + " " +
+    this.year + " " +
+    this.genre + " " +
+    this.ratingAllMusic + " " +
+    this.ratingUsers + " " +
+    this.numberRaters + " " +
+    this.review ;
+    writeText(s);
+}
+
+}
+
+// Here are global albums
+
+
+    // var temp = new album("Abbey Road","Beatles","1970","Pop","4" , "4", "1", "really great!" );
+    var temp = new album("","","","","" , "", "", "" );
+</script>
+
+<style>
+  body {background-color:lightgray}
+  h1   {color:darkred}
+  h2   {color:darkred}
+  h3   {color:darkred}
+  p    {color:darkred}
+</style>
+<body>
+<BR>
+<img src="../assets/img/album-artwork-ideas500x500-30.jpg" alt="album-artwork-ideas500x500-30.jpg" height="100" width="100">
+<img src="../assets/img/130909-arcade-fire-rekletor-album-cover_0.jpg" alt="130909-arcade-fire-rekletor-album-cover_0.jpg" height="100" width="100">
+<img src="../assets/img/aaliyah-posthumous-album-cover-400x400.jpg" alt="aaliyah-posthumous-album-cover-400x400.jpg" height="100" width="100">
+<img src="../assets/img/o-BOB-DYLAN-ALBUM-ARTWORK-570.jpg" alt="o-BOB-DYLAN-ALBUM-ARTWORK-570.jpg" height="100" width="100">
+<BR>
+<h1> Let's add an album</h1>
+
+    <h2>
+    <i>
+    <p id="desc">  This is where text goes. </p></h2>
+    </i>
+
+<FORM NAME="AlbumSurvey">
+<P>
+
+<H3>
+<BR>
+Enter the title of the album<input  NAME="title" id="title" >
+<br>
+Enter the artist<input TYPE=text NAME="artist " id="artist" VALUE=" Enter artist">
+<br>
+
+What year?<INPUT TYPE=text NAME="year" id="year">
+<br>
+Please select the genre
+    <SELECT NAME="genre" ID="genre" >
+      <OPTION VALUE="rock">rock
+      <OPTION VALUE="jazz">jazz
+      <OPTION VALUE="pop">pop
+      <OPTION VALUE="classical">classical
+     </SELECT>
+<BR>
+Your rating from 1-5 of the album (5 is best)
+    <SELECT NAME="ratingUsers"  ID="ratingUsers" >
+      <OPTION VALUE= 1> 1
+      <OPTION VALUE= 2> 2
+      <OPTION VALUE= 3> 3
+      <OPTION VALUE= 4 >4
+      <OPTION VALUE= 5 >5
+     </SELECT>
+    <BR>
+The rating from experts 1-5 of the album (5 is best)
+    <SELECT NAME="ratingAllMusic" ID="ratingAllMusic">
+      <OPTION VALUE= 1> 1
+      <OPTION VALUE= 2> 2
+      <OPTION VALUE= 3> 3
+      <OPTION VALUE= 4 >4
+      <OPTION VALUE= 5 >5
+     </SELECT>
+<br>
+ Enter your review <BR> <TEXTAREA TYPE=text NAME="review" ID="review" VALUE="review " ROWS=2 COLS=45 WRAP=virtual></TEXTAREA>
+<BR>
+
+
+<INPUT TYPE=BUTTON NAME="Enter album" VALUE="Enter album" onClick='temp =  new album( document.getElementById("title").value, document.getElementById("artist").value, document.getElementById("year").value,  document.getElementById("genre").value,  document.getElementById("ratingAllMusic").value, document.getElementById("ratingUsers").value, 1, document.getElementById("review").value )' >
+
+<BR>
+<INPUT TYPE=BUTTON NAME="Add another user rating" VALUE="Add another user rating" onClick='temp.addRatingUsers(document.getElementById("ratingUsers").value)' >
+<BR>
+<INPUT TYPE=BUTTON NAME="Write album" VALUE="Write album" onClick='temp.writeAlbum()' >
+</H3>
+ <INPUT TYPE=reset VALUE="Reset form">
+
+</body>
+</html>
