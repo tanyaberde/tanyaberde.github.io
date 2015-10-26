@@ -8,6 +8,7 @@
 // This is a self-executing function that I added only to stop this
 // new script from interfering with the old one. It's a good idea in general, but not
 // something I wanted to go over during this tutorial
+
 (function(window) {
 
 
@@ -220,6 +221,14 @@ function mainDraw() {
     clear(ctx);
 
     // Add stuff you want drawn in the background all the time here
+    // var canvas = document.getElementById('canvas2');
+    //      var context = canvas.getContext('2d');
+    //      var imageObj = new Image();
+    //
+    //      imageObj.onload = function() {
+    //        context.drawImage(imageObj, 0, 0);
+    //      };
+    //      imageObj.src = 'http://gehirn-atlas.de/gehirn/gehirnatlas.jpg';
 
     // draw all boxes
     var l = boxes2.length;
