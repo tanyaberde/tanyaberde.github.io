@@ -1,0 +1,102 @@
+<html>
+<head>
+<title> Assignment 2 </title>
+<link href="../assets/css/site.css" rel="stylesheet">
+<script type="text/javascript">
+
+// My original plan was to overlay a canvas over the brain image, prompt the user to enclose the outline of the brain region
+// being asked for, push these canvas rectangle coordinates to an empty array, then give accuracy feedback to the user depending on
+// whether their canvas includes any 1 member of the pre-determined poly coordinates from the polygon image maps I gave in Assignment 1.
+// But yeesh THAT WAS TOO AMBITIOUS. My canvas was drawing and resizing fine, but I had difficulty placing the brain image
+// within the bounds of the canvas, or treating it as a background image. I've saved that scrap code for another time.
+
+// So here I start from scratch and make things simpler. Instead of poly coords, I give rect coords.
+// Instead of 13 different pre-mapped regions, I start with 4.
+// I prompt user to click where they think a given region is.
+// If their mouseclick coord (x,y) is within my rect bounds for that region, they are correct. Otherwise, they are wrong.
+
+var c = []; // Declare empty array to collect x and y coordinates of user's click. Don't need this, really.
+var pons = new area("pons", "hindbrain", "metencephalon", "oldest", "sleep and arousal");
+var thalamus = new area ("thalamus", "forebrain", "diencephalon", "newest", "sensory relay to cortex");
+var cerebellum = new area("cerebellum", "hindbrain", "metencephalon", "oldest", "smooth motor action, coordinated movement, and conditioned learning");
+var amygdala = new area("amygdala", "forebain", "telencephalon", "newest", "emotion, especially anxiety and fear");
+
+// Get the coords of the current mouse click to the c array
+function getMouseCoords() {
+    var x = event.clientX;
+    var y = event.clientY;
+    c = String(x) + "," + String(y);
+    console.log("My current mouseclick coords are "+ c);
+    document.getElementById("coordinates").innerHTML = "My x and y coordinates are: "+ c;
+}
+
+// Constructor for brain areas
+function area(name, primaryVesicle, secondaryVesicle, phylo, fxn, coords) {
+    this.name = name;
+    this.primaryVesicle = primaryVesicle;
+    this.secondaryVesicle = secondaryVesicle;
+    this.phylo = phylo;
+    this.fxn = fxn;
+    // this.coords is super hinky
+    this.coords = function(coords) {
+      coords = document.getElementById("pons").coords;
+      console.log("My test coords are " + coords);
+    }
+    //The function locateArea prompts the user for the location of the brain area described and compares it to the coords of the test item.
+    this.locateArea = function (area)
+    {
+        var userGuess, areaPropertiesMessage, areaCoords, correctMessage;
+
+        areaPropertiesMessage = "This structure is located in the " + this.secondaryVesicle + ". It is among the phylogenetically " + this.phylo + " structures in the brain, as it is part of the " + this.primaryVesicle + ". " + "It is mainly involved in " + this.fxn + ". What structure of the brain is this?"
+        areaCoords = document.getElementById("area").coords; // I'm lost! I want 'area' here to change depending on which test item button I click (pons, cerebellum, thalamus, or amygdala)
+        userGuess = c // Get person to click on the image, assign to c from getMouseCoords function
+        if (userGuess < this.coords) // I'm lost! I want to compare the mouse click coords in c to the coords of the tested brain area
+            {
+            correctMessage = "You are correct! That is where the " + this.name + " is located.";
+            }
+        else //Displays when user's mouseclick is outside the pre-specified bounds
+            {
+            correctMessage = "You are incorrect. That's not where the " + this.name + " is. Please try again.";
+            }
+        alert(correctMessage); //Writes the alert to the webpage.
+        document.getElementById("demo").innerHTML = correctMessage;
+    }
+}
+</script>
+</head>
+<body>
+<h1>Assignment 2</h1>
+<h2>Locate that part of the brain</h2>
+
+<p>Click one of the buttons below the image to begin.</p>
+<!--Image from http://www.brain-maps.com/, specifically from http://www.brain-maps.com/gehirn/gehirnatlas.jpg I did not copy their coordinates.-->
+
+<img onclick="getMouseCoords(event)" src="../assets/img/gehirnatlas.jpg" alt="saggital map" usemap="#brain"> <!--Image from http://www.brain-maps.com/, specifically from http://www.brain-maps.com/gehirn/gehirnatlas.jpg I did not copy their coordinates.-->
+<map name="brain"> <!-- DEAR GOD, SO MANY COORDINATES. Thank you, http://imagemap-generator.dariodomi.de/-->
+    <area alt="pons" id="pons" shape="rect" coords="306,207,407,311">
+    <area alt="cerebellum" id="cerebellum" shape="rect" coords="397,129,587,380">
+    <area alt="thalamus" id="thalamus" shape="rect" coords="259,221,369,284">
+    <area alt="amygdala" id="amygdala" shape="rect" coords="266,376,302,394">
+</map>
+<br>
+<p id="coordinates"> Your x and y coordinates will show up here.</p>
+<br>
+<p id="demo"> Your accuracy will show up here.</p>
+<br>
+<input type="button" onclick="pons.locateArea()" value= "1) Guess" />
+<br>
+<input type="button" onclick="cerebellum.locateArea()" value= "2) Guess" />
+<br>
+<input type="button" onclick="thalamus.locateArea()" value= "3) Guess" />
+<br>
+<input type="button" onclick="amygdala.locateArea()" value= "4) Guess" />
+<br>
+</body>
+
+<div id="foot">
+<p>Image credit: <a href=http://www.brain-maps.com/>Brain Maps</a></p>
+<p><a href="webproghome.html">Go back to Web Prog I (EME 6930) Fall 2015 home</a><p>
+<p><a href="../index.html"> Play Heap Home</a></p>
+<p>Thanks for hosting my site, <a href = https://github.com/> github</a>! </p>
+</div>
+</html>
