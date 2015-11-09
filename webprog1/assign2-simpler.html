@@ -16,10 +16,10 @@
 // If their mouseclick coord (x,y) is within my rect bounds for that region, they are correct. Otherwise, they are wrong.
 
 var c = []; // Declare empty array to collect x and y coordinates of user's click. Don't need this, really.
-var pons = new area("pons", "hindbrain", "metencephalon", "oldest", "sleep and arousal");
-var thalamus = new area ("thalamus", "forebrain", "diencephalon", "newest", "sensory relay to cortex");
-var cerebellum = new area("cerebellum", "hindbrain", "metencephalon", "oldest", "smooth motor action, coordinated movement, and conditioned learning");
-var amygdala = new area("amygdala", "forebain", "telencephalon", "newest", "emotion, especially anxiety and fear");
+var pons = new area("pons", "hindbrain", "metencephalon", "oldest", "sleep and arousal", document.getElementById('pons').coords);
+var thalamus = new area ("thalamus", "forebrain", "diencephalon", "newest", "sensory relay to cortex", document.getElementById('thalamus').coords);
+var cerebellum = new area("cerebellum", "hindbrain", "metencephalon", "oldest", "smooth motor action, coordinated movement, and conditioned learning", "document.getElementById('cerebellum').coords");
+var amygdala = new area("amygdala", "forebain", "telencephalon", "newest", "emotion, especially anxiety and fear", "document.getElementById('amygdala').coords");
 
 // Get the coords of the current mouse click to the c array
 function getMouseCoords() {
@@ -37,29 +37,27 @@ function area(name, primaryVesicle, secondaryVesicle, phylo, fxn, coords) {
     this.secondaryVesicle = secondaryVesicle;
     this.phylo = phylo;
     this.fxn = fxn;
-    // this.coords is super hinky
-    this.coords = function(coords) {
-      coords = document.getElementById("pons").coords;
-      console.log("My test coords are " + coords);
-    }
+    this.coords = coords; // should I turn this into an array?
+
     //The function locateArea prompts the user for the location of the brain area described and compares it to the coords of the test item.
     this.locateArea = function (area)
     {
         var userGuess, areaPropertiesMessage, areaCoords, correctMessage;
 
-        areaPropertiesMessage = "This structure is located in the " + this.secondaryVesicle + ". It is among the phylogenetically " + this.phylo + " structures in the brain, as it is part of the " + this.primaryVesicle + ". " + "It is mainly involved in " + this.fxn + ". What structure of the brain is this?"
-        areaCoords = document.getElementById("area").coords; // I'm lost! I want 'area' here to change depending on which test item button I click (pons, cerebellum, thalamus, or amygdala)
-        userGuess = c // Get person to click on the image, assign to c from getMouseCoords function
-        if (userGuess < this.coords) // I'm lost! I want to compare the mouse click coords in c to the coords of the tested brain area
-            {
-            correctMessage = "You are correct! That is where the " + this.name + " is located.";
-            }
-        else //Displays when user's mouseclick is outside the pre-specified bounds
-            {
-            correctMessage = "You are incorrect. That's not where the " + this.name + " is. Please try again.";
-            }
-        alert(correctMessage); //Writes the alert to the webpage.
-        document.getElementById("demo").innerHTML = correctMessage;
+        areaPropertiesMessage = "This structure is located in the " + this.secondaryVesicle + ". It is among the phylogenetically " + this.phylo + " structures in the brain, as it is part of the " + this.primaryVesicle + ". " + "It is mainly involved in " + this.fxn + ". What structure of the brain is this?";
+        areaCoords = this.coords;
+        userGuess = c; // Get person to click on the image, assign to c from getMouseCoords function
+        console.log(this.name + " coords are " + this.coords);
+        // if (userGuess < this.coords) // I'm lost! I want to compare the mouse click coords in c to the coords of the tested brain area
+        //     {
+        //     correctMessage = "You are correct! That is where the " + this.name + " is located.";
+        //     }
+        // else //Displays when user's mouseclick is outside the pre-specified bounds
+        //     {
+        //     correctMessage = "You are incorrect. That's not where the " + this.name + " is. Please try again.";
+        //     }
+        // alert(correctMessage); //Writes the alert to the webpage.
+        // document.getElementById("demo").innerHTML = correctMessage;
     }
 }
 </script>
@@ -72,7 +70,7 @@ function area(name, primaryVesicle, secondaryVesicle, phylo, fxn, coords) {
 <!--Image from http://www.brain-maps.com/, specifically from http://www.brain-maps.com/gehirn/gehirnatlas.jpg I did not copy their coordinates.-->
 
 <img onclick="getMouseCoords(event)" src="../assets/img/gehirnatlas.jpg" alt="saggital map" usemap="#brain"> <!--Image from http://www.brain-maps.com/, specifically from http://www.brain-maps.com/gehirn/gehirnatlas.jpg I did not copy their coordinates.-->
-<map name="brain"> <!-- DEAR GOD, SO MANY COORDINATES. Thank you, http://imagemap-generator.dariodomi.de/-->
+<map name="brain"> <!-- Thank you, http://imagemap-generator.dariodomi.de/-->
     <area alt="pons" id="pons" shape="rect" coords="306,207,407,311">
     <area alt="cerebellum" id="cerebellum" shape="rect" coords="397,129,587,380">
     <area alt="thalamus" id="thalamus" shape="rect" coords="259,221,369,284">
@@ -91,6 +89,7 @@ function area(name, primaryVesicle, secondaryVesicle, phylo, fxn, coords) {
 <br>
 <input type="button" onclick="amygdala.locateArea()" value= "4) Guess" />
 <br>
+<button onclick="locateArea()">Try it</button>
 </body>
 
 <div id="foot">

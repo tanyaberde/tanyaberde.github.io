@@ -1,0 +1,120 @@
+<html>
+<head>
+<title> Mini-Assignment: Randomness </title>
+<link href="../assets/css/site.css" rel="stylesheet">
+<script type="text/javascript">
+
+// Function to return an integer in a certain range that is specified in range speficied by the two paramaters, upper and lower
+ function GetRandomRange(lower, upper)
+ {
+ var length, aNumber;
+
+ length = (upper - lower) + 1;
+ aNumber = Math.floor(Math.random() * length) + lower;
+
+//  alert("GetRandomRange" + lower + " " + upper + " " + aNumber);
+
+ return aNumber;
+
+ }
+
+// Return random string from an array of strings
+  function randomStringFromArray(anArray)
+  {
+    var aString, len, high_index;
+
+    len = anArray.length;
+    high_index = len - 1;
+    random_index =  GetRandomRange(0, high_index);
+
+    aString = anArray[random_index];
+    /*
+    alert("the random string from an array of stings that will be returned is " + aString);
+    */
+    return aString;
+  }
+
+
+// Write text to the desc area
+   function writeText(txt)
+   {
+   document.getElementById("desc").innerHTML=txt;
+   }
+
+// We need a global
+    var lastImageNumber = 1;
+
+// Global set of images
+// Image credit: http://brainmadesimple.com/
+    var moreImages = ["pons.jpg","cerebellum.jpg", "amygdala.png","thalamus.jpg"];
+    var display = "";
+    var display = randomStringFromArray(moreImages);
+
+// Write a random image to a location. So need an array of image names, and then randomly pick from that..
+  // Use writeTextRandomPraise to write the randomly chosen image file into the html
+    function writeTextRandomPraise()
+    {
+      var str1 = " ";
+
+      str1 = randomStringFromArray(moreImages);
+      writeText(str1);
+      return(str1);
+    }
+
+
+// Write a random image to one location
+   function writeRandomImage()
+   {
+       var txt;
+       txt =  "<img src='";
+
+       txt = txt + randomStringFromArray(moreImages);
+
+       txt = txt + "' height='300' onclick = writeTextRandomPraise()>";
+       alert(txt);
+       document.getElementById("desc1").innerHTML=txt;
+      //  lastImageNumber = imageNumberNew;
+
+   }
+   // I need initImageSpot for some reason.
+   function initImageSpot()
+   {
+
+         txt =  "<img src='green.jpg' height='300' onclick = writeTextRandomPraise()>"
+         document.getElementById("desc0").innerHTML=txt;
+         lastImageNumber = imageNumberNew;
+
+   }
+
+function whatBrainRegion(areaGuess)
+  {
+      if (areaGuess == display)
+      alert("You guessed correctly! Click the 'random query' button again.");
+      else
+      alert("You guessed incorrectly. It is the " + display + ". " + "Click the 'random query' button again.");
+  }
+
+</script>
+</head>
+
+<body>
+<h1>Mini-assignment on Randomness</h1>
+
+<form name="myform">
+  Click this button to quiz yourself: <input type="button" onclick="writeRandomImage()" value="Random query" />
+</form>
+
+<p id="desc1"> The picture will appear here.</p>
+<p> Which region is the arrow pointing to?</p>
+<button type="button" onclick="whatBrainRegion('pons.jpg')"> Pons? </button>
+<button type="button" onclick="whatBrainRegion('cerebellum.jpg')"> Cerebellum? </button>
+<button type="button" onclick="whatBrainRegion('amygdala.png')"> Amygdala? </button>
+<button type="button" onclick="whatBrainRegion('thalamus.jpg')"> Thalamus? </button>
+</body>
+
+<div id="foot">
+<p><a href="webproghome.html">Go back to Web Prog I (EME 6930) Fall 2015 home</a><p>
+<p><a href="../index.html"> Play Heap Home</a></p>
+<p>Thanks for hosting my site, <a href = https://github.com/> github</a>! </p>
+</div>
+</html>
