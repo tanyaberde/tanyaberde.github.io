@@ -4,7 +4,11 @@
 <link href="../assets/css/site.css" rel="stylesheet">
 <script type="text/javascript">
 
-// Make user guess that part of the brain when they click!
+// Make user guess that part of the brain when they click.
+// The user can gather their guesses into a collection
+// then they can select which one they weren't sure about and view the corresponding clue
+// so they can review/study the item more carefully.
+
 // Create global variables that determine properties of brain parts clicked //
 var pons = new part("pons", "hindbrain", "metencephalon", "oldest", "sleep and arousal");
 var thalamus = new part ("thalamus", "forebrain", "diencephalon", "newest", "sensory relay to cortex");
@@ -20,6 +24,7 @@ var frontalLobe = new part("frontal lobe", "forebrain", "telencephalon", "newest
 var temporalLobe = new part("temporal lobe", "forebrain", "telencephalon", "newest", "hearing, speech, working memory, visually processing faces and scenes, and is one of the four major lobes");
 var occipitalLobe = new part("occipital lobe", "forebrain", "telencephalon", "newest", "vision, and is one of the four major lobes");
 
+// Declare the user's guess and clue globally so I can reference in other functions.
 var userGuess;
 var partPropertiesMessage;
 
@@ -42,25 +47,25 @@ function part(name, primaryVesicle, secondaryVesicle, phylo, fxn) {
         if (userGuess.toLowerCase() == this.name) //*.toLowerCase() converts user's input to lowercase to easily compare with my givens
             {
             correctMessage = "You are correct! It is the " + this.name + ".";
-
             }
         else if (userGuess == "") //Displays when user doesn't input anything
             {
             correctMessage = "You did not enter anything. The answer is " + this.name + ".";
-
             }
         else // Displays when user's answer is wrong
             {
             correctMessage = "You are incorrect. It is the " + this.name + ".";
-
             }
         alert(correctMessage); // Writes the alert to the webpage.
         document.getElementById("demo").innerHTML = correctMessage;
-        console.log("userGuess was " + userGuess);
+        // console.log("userGuess was " + userGuess);
+        // console.log("partPropertiesMessage was " + partPropertiesMessage);
+      this.clue = partPropertiesMessage;
+        console.log(this.name + " clue was " + this.clue);
     }
 }
 
-function welcomeBack() // copied from the book review example
+function welcomeBack() // Copied from the book review example
 {
 if (typeof(Storage)!=="undefined")
     {
@@ -76,21 +81,20 @@ if (typeof(Storage)!=="undefined")
   	{
   	document.getElementById("result").innerHTML="Sorry, your browser does not support web storage... so I can not greet you by name.";
   	}
-
-  /* supposedly alternate way to do local storage
-  localStorage.setItem('myKey', 'myValue');
-  var myVar = localStorage.getItem('myKey');
-  */
 }
 
 var parts = [];
 var activepart;
+var partsClue = [];
+var activepartsClue;
 
 function add_part()
-        //creating a function that uses elements from the html form area_info
-{//add a new object (from the newarea prototype) to  'var area []' using the push method
+
+{//add a new object (from the newarea prototype) to  'var parts' array using the push method
             parts.push(userGuess);
-            console.log("Added " + userGuess + " to array");
+            partsClue.push(partPropertiesMessage);
+            console.log("Added " + userGuess + " to parts array");
+            console.log("Added " + partPropertiesMessage + " to partsClue array");
             // alert("Please click another area on the map and guess. Hit the 'Add' button after every guess.");
 }
 
@@ -121,6 +125,32 @@ function writepartsLocalStorage()
     console.log("Local Storage stored the whole string of parts as " + localStorage.parts);
 
         document.getElementById("parts").innerHTML = localStorage.parts;
+    // }
+    // {
+      var cValue;
+      var cOut = "";
+
+    for (var i = 0; i < partsClue.length; i++)
+    {
+
+      cValue = partsClue[i] + " | " ; // We're using | as the delimiter for later
+
+      // localStorage.sName = sValue;
+      cOut = cOut + cValue; //cOut is each time we are adding the area string
+      // sOut = sOut.toString();
+    }
+
+   // write the clues for each part to local storage, and the string that holds all the fields of the parts.
+  localStorage.numpartsClue = partsClue.length;
+  // test = sOut.toString();
+  localStorage.partsClue = cOut;
+  // console.log("sOut was " + sOut);
+  // console.log("sOut.toString() was " + test);
+  // console.log("parts[1] was " + sValue);
+  console.log("Local Storage stored the number of parts as " + localStorage.numpartsClue);
+  console.log("Local Storage stored the whole string of parts as " + localStorage.partsClue);
+
+      // document.getElementById("partsClue").innerHTML = localStorage.partsClue;
     }
 
 function readPartsLocalStorage ()
@@ -132,13 +162,13 @@ function readPartsLocalStorage ()
 
     if (typeof(Storage)!=="undefined")
     {
-        console.log("Made it to line 63, condition typeof(Storage) was not equal to the string undefined");
-        console.log("Changed line 64 to only if localStorage.numBooks != null at 4:42");
+        // console.log("Made it to line 63, condition typeof(Storage) was not equal to the string undefined");
+        // console.log("Changed line 64 to only if localStorage.numBooks != null at 4:42");
     	if (localStorage.numparts != null)
         {
-        console.log("Attempting to write local storage's numBooks property to numBooks");
+        // console.log("Attempting to write local storage's numBooks property to numBooks");
     numberParts = localStorage.numparts;
-          console.log("Retrieved numparts from localstorage.  It was assigned to numberParts with the value of " + numberParts);
+          // console.log("Retrieved numparts from localstorage.  It was assigned to numberParts with the value of " + numberParts);
 
     // Get the string for all the guessed parts collected.
         wholeString = localStorage.parts;
@@ -161,34 +191,9 @@ function readPartsLocalStorage ()
             }
                 alert("Your guess: " + title);
 
-          //   author = "";
-          //   ++j;
-          //
-          //   while (wholeString.charAt(j) != "|" )
-          //   {
-          //       author += wholeString.charAt(j);
-          //       ++j;
-          //   }
-          //
-          //   alert("author: " + author);
-          //
-          //   genre = "";
-          //   ++j;
-          //
-          // while (wholeString.charAt(j) != "|" )
-          //   {
-          //       genre += wholeString.charAt(j);
-          //       ++j;
-          //   }
-          //
-          //   //alert("genre: " + genre);
-          //
-          //   // increment character index once more,
-          //   // to go past | & to go the next book
             ++j;
 
         parts.push (new part(title)); //reconstituting the book array
-
 
         }
 
@@ -197,9 +202,29 @@ function readPartsLocalStorage ()
         } else alert("No local Storage");
 }
 
+function choose_a_part() // User chooses a number. Show the selected guess and associated clue.
+{
+  var x;
+  var y=0;
+  do {
+    if (y>0)
+    {
+      alert("Sorry, that number wasn't recognized.  Please try again.");
+    }
+    var x = prompt("Type the number for the guess whose clue you would like to review.");
+    x = parseInt(x);
+    y++;
+  } while (x<=0 || x>parts.length || isNaN(x))
+
+document.getElementById("selectedGuess").innerHTML = "Here was the clue for:  " + parts[x-1] + "<br>";
+document.getElementById("areaReview").innerHTML = partsClue[x-1];
+activepart = x - 1;
+activepartsClue = x - 1;
+}
+
 function reset()
 {
-    localStorage.clear(); // This will reset localStorage.readerName
+    localStorage.clear(); // This will reset localStorage.readerName only.
     window.location.reload();
     console.log("localStorage has been cleared");
 }
@@ -214,13 +239,7 @@ function reset()
 <button type="button" onclick="reset()" value="Reset">Reset user and reload page</button>
 <h2>Guess that part of the brain.</h2>
 <p>Begin by clicking on any part of the brain below. <br> (Note: Not every brain area is clickable...yet)</p>
-<!-- <p> Click these buttons to get you started. </p>
-<input type="button" onclick="guessAreaNameOnly(pons)" value="1) Guess this part of the brain" />
-<br><br>
-<input type="button" onclick="guessAreaNameOnly(thalamus)" value="2) Guess this part of the brain" />
-<br><br>
-<input type="button" onclick="guessAreaNameOnly(tectum)" value="3) Guess this part of the brain" />
-<br><br> -->
+
 <img src="../assets/img/gehirnatlas.jpg" alt="saggital map" usemap="#brain"> <!--Image from http://www.brain-maps.com/, specifically from http://www.brain-maps.com/gehirn/gehirnatlas.jpg I did not copy their coordinates.-->
 <map name="brain"> <!-- DEAR GOD, SO MANY COORDINATES. Thank you, http://imagemap-generator.dariodomi.de/-->
     <area alt="pons" title="pons" onclick="pons.guesspartNameOnly()" shape="polygon" coords="323,329,303,334,291,350,287,376,294,405,304,425,320,436,334,440,348,439,361,430,368,414,373,388,373,369,362,349,348,334">
@@ -239,10 +258,13 @@ function reset()
 </map>
 <p id="demo"> Your guess and the answer will appear here.</p>
 <p id="parts"></p>
-<input type="button" onclick="add_part()" value="1) Add a guessed area">
+<p id="partsClue"></p>
+<input type="button" onclick="add_part()" value="1) Add a guess to your collection">
 <input type="button" onclick= "writepartsLocalStorage();" value="2) Write to local storage">
 <input type="button" onclick= "readPartsLocalStorage();" value="3) Read guessed area from local storage">
-
+<input type="button" onclick= "choose_a_part();" value="4) Select a guessed area to review">
+<h3 id= "selectedGuess"></h3>
+  <p id= "areaReview"></p>
 </main>
 </body>
 
