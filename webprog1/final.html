@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title> Final Assignment </title>
+<link href="../assets/css/site.css" rel="stylesheet">
+<script type="text/javascript">
+/*
+* The goal of this page is to train a person's rhythm using a metronome. The user clicks a button
+* to play a random regular beat (in beats per minute or bpm), after which they must model or follow
+* without guidance from the computer. They do this for a set time.
+* The computer then gives the user feedback about how they did (too slow, too fast, just right).
+* User profits or starts over!
+*/
+var tempo = 120.0 // Tempo in beats per minute (bpm)
+var secondsPerBeat = 60.0 / tempo;
+
+// Load and play a sound. s is the name of a wav file
+var player = new Audio(); // Define global audio object
+function play(s) {
+  player.src = "../assets/audio/beep-8.wav"; // Can change this to tick.wav or beep-7.wav
+  player.load();
+  player.play();
+}
+
+var bpm = 60; //This will be an array of different bpm. For now, test one at a time.
+
+function metronome(bps) {
+  var bps =  bpm/60; // beats per second (bps)
+  var interv = 1000/bps; // converts bps to milliseconds
+  setInterval(play, interv); //
+  console.log("Metronome is playing " + bpm + " bpm");
+}
+
+function pause() {
+    player.pause();
+}
+
+</script>
+</head>
+<body>
+  <h1>Final assignment: Metronome Trainer</h1>
+Click here to hear a beat <input type="button" onclick="metronome()" value="Play a beat" />
+Pause does not work yet :( <input type="button" onclick="pause()" value="Pause" />
+<br><br>
+
+</body>
+<div id="foot">
+<p><a href="webproghome.html">Go back to Web Prog I (EME 6930) Fall 2015 home</a><p>
+<p><a href="../index.html"> Play Heap Home</a></p>
+<p>Thanks for hosting my site, <a href = https://github.com/> github</a>! </p>
+</div>
+
+</html>
