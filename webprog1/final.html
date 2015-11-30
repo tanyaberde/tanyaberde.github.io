@@ -11,37 +11,92 @@
 * The computer then gives the user feedback about how they did (too slow, too fast, just right).
 * User profits or starts over!
 */
-var tempo = 120.0 // Tempo in beats per minute (bpm)
-var secondsPerBeat = 60.0 / tempo;
 
-// Load and play a sound. s is the name of a wav file
-var player = new Audio(); // Define global audio object
-function play(s) {
-  player.src = "../assets/audio/beep-8.wav"; // Can change this to tick.wav or beep-7.wav
-  player.load();
-  player.play();
+//// Globals
+// var tempo = 120.0 // Tempo in beats per minute (bpm)
+// var secondsPerBeat = 60.0 / tempo;
+// var bpm = 60; //This will be an array of different bpm. For now, change and test one bpm at a time.
+var bpmArray = [30,60,90,120,150]; // Next time, make this something like range(30,160)
+var playMet = [];
+var playImage = [];
+
+// Randomize tempos from bpmArray
+function GetRandomRange(lower, upper) { // Function to return an integer in a certain range that is specified in range speficied by the two paramaters, upper and lower
+var length, aNumber;
+length = (upper - lower) + 1;
+aNumber = Math.floor(Math.random() * length) + lower;
+//  alert("GetRandomRange" + lower + " " + upper + " " + aNumber);
+return aNumber;
 }
 
-var bpm = 60; //This will be an array of different bpm. For now, test one at a time.
+function randomStringFromArray(anArray) { // Return random string from an array of strings
+   var aString, len, high_index;
 
+   len = anArray.length;
+   high_index = len - 1;
+   random_index =  GetRandomRange(0, high_index);
+
+   aString = anArray[random_index];
+   /*
+   alert("the random string from an array of stings that will be returned is " + aString);
+   */
+   return aString;
+ }
+
+ // Load and play a sound. s is the name of a wav file
+ var player = new Audio(); // Define global audio object
+ function play(s) {
+   player.src = "../assets/audio/beep-8.wav"; // Can change this to tick.wav or beep-7.wav
+   player.load();
+   player.play();
+ }
+
+// Play the beep sound according to a set tempo
 function metronome(bps) {
-  var bps =  bpm/60; // beats per second (bps)
-  var interv = 1000/bps; // converts bps to milliseconds
-  setInterval(play, interv); //
-  console.log("Metronome is playing " + bpm + " bpm");
+  var beat = " ";
+  beat = randomStringFromArray(bpmArray); // pick random tempo from bpmArray
+  var bps =  beat/60; // beats per second (bps) divides selected bpm by playRandomSound() by 60
+  var interv = 1000/bps; // converts bps to milliseconds so that setInterval can pass it
+  playMet = setInterval(play, interv); // Play beep at the specified interv
+  playImage = setInterval(setColor, interv); // Change background color on each beep
+  console.log("Metronome is playing " + beat + " bpm");
+  setColor();
 }
 
-function pause() {
-    player.pause();
+// var myVar = setInterval(function(){ setColor() }, 300);
+
+function setColor() { // Changes background color on event
+  var x = document.body;
+  x.style.backgroundColor = x.style.backgroundColor == "darkseagreen" ? "lightsteelblue" : "darkseagreen";
 }
+
+function pauseMet() { // Pause metronome and accompanying graphic
+  clearInterval(playMet);
+  clearInterval(playImage);
+  console.log("Metronome stopped");
+}
+
+// Provide space for user to click a beat
+
+// Get click event of user
+
+// Compute average offset between user clicks
+
+// Compare average offset with allowed error, give feedback
+
 
 </script>
 </head>
 <body>
   <h1>Final assignment: Metronome Trainer</h1>
-Click here to hear a beat <input type="button" onclick="metronome()" value="Play a beat" />
-Pause does not work yet :( <input type="button" onclick="pause()" value="Pause" />
+Click here to play a beat <input type="button" onclick="metronome()" value="Play a beat" />
+<br>
+Pause the metronome player <input type="button" onclick="pauseMet()" value="Pause" />
 <br><br>
+Tap the beat you just heard using mouse clicks in the space below
+<br>
+<canvas id="tapArea" width="200" height="100" style="border:1px solid #000000;">Your browser does not support the HTML5 canvas tag.</canvas>
+<!--  space for user to tap a beat with their mouse-->
 
 </body>
 <div id="foot">
