@@ -16,9 +16,12 @@
 // var tempo = 120.0 // Tempo in beats per minute (bpm)
 // var secondsPerBeat = 60.0 / tempo;
 // var bpm = 60; //This will be an array of different bpm. For now, change and test one bpm at a time.
-var bpmArray = [30,60,90,120,150]; // Next time, make this something like range(30,160)
+var bpmArray = [30,40,50,60,70,80,90,100,110,120,130,140,150,160]; // Next time, make this something like range(30,160)
+var beat = " ";
+var bps, interv;
 var playMet = [];
 var playImage = [];
+var interv = []; // interv collects one interv defined by metronome() according to randomly chosen BPM
 
 // Randomize tempos from bpmArray
 function GetRandomRange(lower, upper) { // Function to return an integer in a certain range that is specified in range speficied by the two paramaters, upper and lower
@@ -53,18 +56,25 @@ function randomStringFromArray(anArray) { // Return random string from an array 
 
 // Play the beep sound according to a set tempo
 function metronome(bps) {
-  var beat = " ";
+  // var beat = " ";
   beat = randomStringFromArray(bpmArray); // pick random tempo from bpmArray
-  var bps =  beat/60; // beats per second (bps) divides selected bpm by playRandomSound() by 60
-  var interv = 1000/bps; // converts bps to milliseconds so that setInterval can pass it
+  bps =  beat/60; // beats per second (bps) divides selected bpm from playRandomSound() by 60
+  interv = 1000/bps; // converts bps to milliseconds so that setInterval can pass it
   playMet = setInterval(play, interv); // Play beep at the specified interv
   playImage = setInterval(setColor, interv); // Change background color on each beep
   console.log("Metronome is playing " + beat + " bpm");
+  console.log("interv is " + interv);
   setColor();
 }
 
-// var myVar = setInterval(function(){ setColor() }, 300);
+function replay() { // Replay the beat the user just heard. Does not randomize beats.
+  playMet = setInterval(play, interv); // Play beep at the specified interv
+  playImage = setInterval(setColor, interv); // Change background color on each beep
+  console.log("Replaying metronome at " + beat + " bpm");
+  setColor();
+}
 
+// Change background color and sync it to the currently playing tempo
 function setColor() { // Changes background color on event
   var x = document.body;
   x.style.backgroundColor = x.style.backgroundColor == "darkseagreen" ? "lightsteelblue" : "darkseagreen";
@@ -76,28 +86,137 @@ function pauseMet() { // Pause metronome and accompanying graphic
   console.log("Metronome stopped");
 }
 
-// Provide space for user to click a beat
-
 // Get click event of user
+var arrayOfClicks = []; // arrayOfClicks collects the clicks of the user.
+var userInterval = []; // userInterval is computed by averageTime() and will be compared to interv
+var errorCoeff = 0.5; // errorCoeff is multiplied by current interv to determine lower and upper error windows
+var feedback; // Feedback will collect appropriate feedback for a tried beat
+
+// call this on the onclick event of an image of a drum
+function beatDrum() {
+  var ms, stopTimeObj;
+  stopTimeObj = new Date(); //
+  ms = stopTimeObj.getTime();
+  arrayOfClicks.push(ms);
+  // console.log("stopTimeObj is " + stopTimeObj);
+  // console.log("ms is " + ms);
+  console.log("arrayOfClicks has length " + arrayOfClicks.length);
+}
+
+// Determine what to do with the image every time user does something
+function imageClickOn() { // Changes drum image on mouse click
+    document.getElementById('tapArea').src = "../assets/img/drum-2.png";
+}
+function imageClickOff() { // Changes drum image when mouse click button is lifted
+    document.getElementById('tapArea').src = "../assets/img/drum.png";
+}
+
+function overImage() { // Changes drum image to gray when cursor is over image
+    document.getElementById('tapArea').src = "../assets/img/drum.png";
+}
+
+function offImage(){ // Changes drum image when cursor is off image
+    document.getElementById('tapArea').src = "../assets/img/drum-gray.png";
+}
 
 // Compute average offset between user clicks
+function averageTime() {
+  var diffs = []; // Empty array ready to collect offsets between clicks
+  for (var i = 0 ; i < (arrayOfClicks.length - 1); i++) { // For each element in arrayOfClicks,
+    offs = arrayOfClicks[i+1] - arrayOfClicks[i]; // calculate the time difference between the next element and the current element,
+    diffs.push(offs); // then push it to the diffs array
+  }
+  console.log("diffs is " + diffs);
+  var sum = 0; // Now sum all the diffs
+  for (var i = 0 ; i < (diffs.length); i++) {
+    sum += diffs[i];
+  }
+  userInterval = sum / diffs.length; // and get the average interval of the user!
+  console.log("userInterval is " + userInterval);
+}
 
 // Compare average offset with allowed error, give feedback
+function compareIntervals() {
+  var lowBound = interv - (errorCoeff * interv);
+  var highBound = interv + (errorCoeff * interv);
+  averageTime();
+  if (isNaN(userInterval)) { // If user did not tap a beat, warn them.
+    alert("You did not tap a beat. Tap the drum.")
+  }
+  else if (interv.length==0) { // If user did not play metronome before tapping, warn them.
+    alert("You did not play the metronome. Play a beat before tapping the drum.")
+  }
+  else if (userInterval < lowBound) {
+    feedback = "Fast";
+    alert("Sorry, you were too fast. Try again.");
+  }
 
+  else if (userInterval > highBound) {
+    feedback = "Slow";
+    alert("Sorry, you were too slow. Try again.");
+  }
+
+  else if ((userInterval < highBound) && (userInterval > lowBound)) {
+    feedback = "On time";
+    alert("You were on time! Nice job.");
+  }
+  console.log("lower and upper error bounds were " + lowBound + " and " + highBound);
+}
+
+function clearAttempt() { // Clear user clicks so user can retry tapping
+  arrayOfClicks = [];
+  userInterval = [];
+  console.log("arrayOfClicks and userInterval are emptied");
+}
+
+function welcomeBack() //
+{
+if (typeof(Storage)!=="undefined")
+    {
+
+	if ((typeof localStorage.readerName == "undefined") || (localStorage.readerName == null))
+		{
+		localStorage.readerName=prompt("Welcome, what is your name?");
+		}
+
+  	document.getElementById("userName").innerHTML= localStorage.readerName + " is testing their rhythm.";
+  	}
+	else
+  	{
+  	document.getElementById("userName").innerHTML="Sorry, your browser does not support web storage... so I can not greet you by name.";
+  	}
+}
+
+function reset() { // This will reset localStorage.readerName only.
+    localStorage.clear();
+    window.location.reload();
+    console.log("localStorage has been cleared");
+}
+
+//
 
 </script>
 </head>
-<body>
+<body onload="welcomeBack()">
   <h1>Final assignment: Metronome Trainer</h1>
-Click here to play a beat <input type="button" onclick="metronome()" value="Play a beat" />
+  <h2><span id="userName"> I am testing my rhythm. </span></h2>
+Click here to play a new beat: <button type="button" class="btn" onclick="metronome()">Play</button>
+<button type="button" class="btn" onclick="pauseMet()">Pause</button>
 <br>
-Pause the metronome player <input type="button" onclick="pauseMet()" value="Pause" />
+Didn't catch it? Click to replay: <button type="button" class="btn" onclick=replay()>Replay</button>
 <br><br>
-Tap the beat you just heard using mouse clicks in the space below
+Tap the drum below to the rhythm you just heard. Try to be accurate. <br>
+Then test your rhythm.
 <br>
-<canvas id="tapArea" width="200" height="100" style="border:1px solid #000000;">Your browser does not support the HTML5 canvas tag.</canvas>
-<!--  space for user to tap a beat with their mouse-->
-
+<button type="button" class="btn" onclick="compareIntervals()"> Judge my rhythm </button>
+<br>
+<img id="tapArea" src="../assets/img/drum-gray.png" onclick="beatDrum()" onmousedown="imageClickOn()" onmouseup="imageClickOff()" onmouseover="overImage()" onmouseout="offImage()">
+<br><br>
+<!-- What was my average time? <input type="button" onclick="averageTime()" value="Average" /> -->
+<br>
+<button type="button" class="btn" onclick="clearAttempt()"> Clear last attempt </button>
+<button type="button" class="btn" onclick="reset()">Reset user</button>
+<br>
 </body>
 <div id="foot">
 <p><a href="webproghome.html">Go back to Web Prog I (EME 6930) Fall 2015 home</a><p>
