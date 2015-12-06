@@ -157,8 +157,11 @@ function readPartsLocalStorage ()
     {
         var sValue;
         var j, numberParts;
-        var title, author, genre, wholeString;
+        var title, wholeString;
         var i = 0;
+        var g, numberPartsClue;
+        var titleClue, wholeStringClue;
+        var k = 0;
 
     if (typeof(Storage)!=="undefined")
     {
@@ -168,10 +171,12 @@ function readPartsLocalStorage ()
         {
         // console.log("Attempting to write local storage's numBooks property to numBooks");
     numberParts = localStorage.numparts;
+    numberPartsClue = localStorage.numberpartsClue;
           // console.log("Retrieved numparts from localstorage.  It was assigned to numberParts with the value of " + numberParts);
 
     // Get the string for all the guessed parts collected.
         wholeString = localStorage.parts;
+        wholeStringClue = localStorage.partsClue;
 
         // j holds the index into the whole string of the parts guessed.
         j = 0;
@@ -193,10 +198,31 @@ function readPartsLocalStorage ()
 
             ++j;
 
-        parts.push (new part(title)); //reconstituting the book array
+        parts.push(new part(title)); //reconstituting the parts array
 
         }
+        // k holds the index into the string of the clues associated with the guessed parts.
+        k = 0;
+        for (g = 0; g < numberPartsClue; g++) // Now parse!
+        {
 
+            //alert("in while loop, book:  whole string: " + wholeString);
+            titleClue = "";
+
+            //alert("before title loop, char is: " + wholeString.charAt(j) );
+            while (wholeStringClue.charAt(k) != "|" )
+            {
+                titleClue += wholeStringClue.charAt(k);
+                ++k;
+                //alert("At bottom title loop, char is: " + wholeString.charAt(j) );
+            }
+                alert("Your guess: " + titleClue);
+
+            ++k;
+
+        // partsClue.push (new part(titleClue)); //reconstituting the partsClue array
+          partsClue.push(titleClue);
+        }
       }  else alert("numparts undefined");
 
         } else alert("No local Storage");
