@@ -12,7 +12,7 @@ header {
 }
 body {
     font-family: "Helvetica", Helvetica, Geneva, sans-serif;
-    font-size: 16px;
+    font-size: 20px;
     background-color: #FFC4B8;
     color: #9C4744;
     padding: 10px;
@@ -38,25 +38,42 @@ h1 {
     font-family: "Helvetica", sans-serif;
     border-bottom: 3px solid #FFECD7;
     color: #963D62;
-    font-size: 30px;
+    font-size: 35px;
 }
 h2 {
     font-family: "Helvetica", sans-serif;
     color: #963D62;
-    font-size: 22px;
+    font-size: 25px;
 }
 p {
   font-family: Geneva;
-  font-size: 15px;
+  font-size: 18px;
   color: #963D62;
 }
 ul {
   font-family: Geneva;
-  font-size: 15px;
+  font-size: 18px;
   color: #963D62;
 }
 #foot {
  font-family: "Elephant", serif;
  color: #B07E47;
  font-size: 8px;
+}
+.btn {
+  -webkit-border-radius: 10;
+  -moz-border-radius: 10;
+  border-radius: 10px;
+  font-family: "Helvetica";
+  color: #963D62;
+  font-size: 15px;
+  background: #ffecd7;
+  padding: 5px 5px 5px 5px;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: #963D62;
+  text-decoration: none;
+  color: #ffecd7;
 }
