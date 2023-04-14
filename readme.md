@@ -1,4 +1,3 @@
-# Tanya's play heap
-This was part of a course project for website-building. 
-For now it houses only my CV, resume, and bio. 
-Only the CV and resume are periodically updated.
+# Play heap
+This was originally part of a course project for website-building. 
+Now it primarily houses my CV and resume, the only links that are periodically updated.
